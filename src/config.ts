@@ -1,7 +1,11 @@
+import 'dotenv/config'
+
 export interface ServerConfig {
     port: number
     bcryptHashSalt: number
     serverSecret: string
+    database: DatabaseConfig
+    redis: RedisConfig
 }
 
 export interface DatabaseConfig {
@@ -36,8 +40,11 @@ export function loadConfig(): ServerConfig {
     const config: Record<string, any> = {}
 
     for (const [name, value] of Object.entries(process.env)) {
-        let key = name
-        let currConfig = config
+        if (!name.startsWith('APP_')) {
+            continue;
+          }
+        let key = name.substring('APP_'.length);
+        let currConfig = config;
 
         if (key.startsWith('DATABASE_')) {
             key = key.substring('DATABASE_'.length)
@@ -59,7 +66,9 @@ export function loadConfig(): ServerConfig {
 
     cachedConfig = config as ServerConfig
 
-    return config as ServerConfig
+    console.log(cachedConfig)
+
+    return cachedConfig
 }
 
 function isIntegerConfig(key: string): boolean {

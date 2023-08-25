@@ -1,5 +1,4 @@
-export interface Post {
-    id: number;
-    userId: number;
+export interface Post extends BaseModel {
+    user_id: number;
     title: string;
 }

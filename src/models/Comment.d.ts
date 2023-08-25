@@ -1,6 +1,4 @@
-export interface Comment {
-    id: number;
-    postId: number;
+export interface Comment extends BaseModel {
+    post_id: number;
     content: string;
-    createdAt: Date;
 }

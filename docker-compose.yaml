@@ -1,0 +1,38 @@
+# This is the docker-compose file to run required background serivces for developent purposes
+# It can be used to quickly run 3 services:
+#   1) The Postgres database
+#   2) Redis 
+#  3) PgAdmin
+# You can start all services by running "docker-compose up"
+version: '3.7'
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/var/lib/postgresql/postgresdata
+    volumes:
+      - ./postgres/postgres.conf:/usr/local/etc/postgres/postgres.conf
+      - ./postgres/:/docker-entrypoint-initdb.d/
+    command: postgres -c config_file=/usr/local/etc/postgres/postgres.conf
+    ports:
+      - '5432:5432'
+  redis:
+    image: redis:6
+    restart: always
+    command: redis-server --requirepass password
+    ports:
+      - '6379:6379'
+  pgadmin:
+    links:
+      - postgres:postgres
+    image: dpage/pgadmin4
+    ports:
+      - 8080:80
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    depends_on:
+      - postgres

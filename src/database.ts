@@ -30,6 +30,7 @@ export async function initDatabase(config: DatabaseConfig): Promise<void> {
     try {
         client = await pool.connect()
         await client.query('SELECT pg_advisory_lock(1)');
+        await migrate(client)
         
     } finally {
         if (client) {
@@ -47,7 +48,7 @@ export async function closeDatabase(): Promise<void> {
 }
 
 async function migrate(client: PoolClient): Promise<void> {
-    await client.query(`CREATE TABLE IF NNOT EXISTS "Databaseigration" (
+    await client.query(`CREATE TABLE IF NOT EXISTS "DatabaseMigration" (
         "id" INTEGER NOT NULL PRIMARY KEY,
         "version" INTEGER NOT NULL
     )`)
@@ -62,7 +63,7 @@ async function migrate(client: PoolClient): Promise<void> {
     const migrationKeys = Object.keys(migrations)
 
     for (let i = version +1; i <= migrationKeys.length; i++) {
-        const migration = (migrations as Record<string, migrations.Migration>)['V' + i]
+        const migration = (migrations as Record<string, migrations.Migration>)['v' + i]
         if (migration) {
             logger.info('Running database migration', { version: `v${i}` });
             await migration.run(client);
