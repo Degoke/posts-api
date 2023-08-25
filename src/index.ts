@@ -1,7 +1,7 @@
 import express from 'express';
 import { initApp } from './app';
 import { loadConfig } from './config';
-import { logger, parseLogLevel } from './logger';
+import { logger } from './logger';
 
 export async function main(): Promise<void> {
   process.on('unhandledRejection', (err: any) => {

@@ -5,12 +5,12 @@ import http from 'http';
 import { ServerConfig } from './config';
 import { closeDatabase, initDatabase } from './database';
 import { healthcheckHandler } from './healthcheck';
-import { logger } from './logger';
-import { closeRateLimiter } from './ratelimit';
 import { closeRedis, initRedis } from './redis';
 import { asyncWrap } from './async';
 import { authRouter } from './auth';
-import { userRouter } from './user';
+import { usersRouter } from './user';
+import { postsRouter } from './post';
+import { errorHandler, notFoundHandler } from './errors/middleware';
 
 let server: http.Server | undefined = undefined;
 
@@ -43,23 +43,6 @@ function standardHeaders(_req: Request, res: Response, next: NextFunction): void
   next();
 }
 
-/**
- * Global error handler.
- * See: https://expressjs.com/en/guide/error-handling.html
- * @param err Unhandled error.
- * @param req The request.
- * @param res The response.
- * @param next The next handler.
- */
-function errorHandler(err: any, req: Request, res: Response, next: NextFunction): void {
-  if (res.headersSent) {
-    next(err);
-    return;
-  }
-  logger.error('Unhandled error', err);
-  res.status(500).json({ msg: 'Internal Server Error' });
-}
-
 export async function initApp(app: Express, config: ServerConfig): Promise<http.Server> {
   await initAppServices(config);
   server = http.createServer(app);
@@ -86,10 +69,12 @@ export async function initApp(app: Express, config: ServerConfig): Promise<http.
   apiRouter.get('/', (_req, res) => res.sendStatus(200));
   apiRouter.get('/healthcheck', asyncWrap(healthcheckHandler));
   apiRouter.use('/auth', authRouter)
-  apiRouter.use('/user', userRouter)
+  apiRouter.use('/users', usersRouter)
+  apiRouter.use('/posts', postsRouter)
 
   app.use('/api/', apiRouter);
-  app.use(errorHandler);
+  app.use(notFoundHandler);
+app.use(errorHandler);
   return server;
 }
 
@@ -101,7 +86,6 @@ export async function initAppServices(config: ServerConfig): Promise<void> {
 export async function shutdownApp(): Promise<void> {
   await closeDatabase();
   closeRedis();
-  closeRateLimiter();
 
   if (server) {
     server.close();

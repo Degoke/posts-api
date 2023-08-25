@@ -1,9 +1,8 @@
-import { Settings } from "http2";
-import { BaseModel } from "./BaseModel";
-
-export interface User extends BaseModel {
-    firstname: string
- lastname: string
-  email: string;
-  password: string;
+export interface User {
+    id: string
+    name: string
+    email: string
+    password: string
+    created_at?: Date
+    last_updated?: Date
 }

@@ -2,7 +2,7 @@ import 'dotenv/config'
 
 export interface ServerConfig {
     port: number
-    bcryptHashSalt: number
+    environment: "developent" | "test" | "production"
     serverSecret: string
     database: DatabaseConfig
     redis: RedisConfig
@@ -36,6 +36,10 @@ export function getConfig(): ServerConfig {
     return cachedConfig
 }
 
+export function isProduction(): boolean {
+    return getConfig().environment === 'production'
+}
+
 export function loadConfig(): ServerConfig {
     const config: Record<string, any> = {}
 
@@ -66,10 +70,18 @@ export function loadConfig(): ServerConfig {
 
     cachedConfig = config as ServerConfig
 
-    console.log(cachedConfig)
-
     return cachedConfig
 }
+
+/**
+ * Loads the configuration setting for unit and integration tests.
+ * @returns The configuration for tests.
+ */
+export function loadTestConfig(): ServerConfig {
+    const config = loadConfig()
+    config.database.dbname = 'test_db';
+    return config;
+  }
 
 function isIntegerConfig(key: string): boolean {
     return key === 'port'
