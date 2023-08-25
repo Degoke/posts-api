@@ -1,25 +1,15 @@
-FROM node:18.16.0-alpine as base
+FROM node:14-alpine
 
-# Add package file
+WORKDIR /usr/src/app
+
 COPY package*.json ./
 
-# Install deps
 RUN npm install
 
-# Copy source
-COPY src ./src
-COPY tsconfig.json ./tsconfig.json
+COPY . .
 
-# Build dist
 RUN npm run build
 
-# Start production image build
-FROM node:18.16.0-alpine
-
-# Copy node modules and build directory
-COPY --from=base ./node_modules ./node_modules
-COPY --from=base /dist /dist
-
-# Expose port 3000
 EXPOSE 3000
-CMD ["npm", "start"]
+
+CMD [ "npm", "start" ]
