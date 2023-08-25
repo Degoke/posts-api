@@ -32,7 +32,7 @@ export function getConfig(): ServerConfig {
     return cachedConfig
 }
 
-function loadConfig(): ServerConfig {
+export function loadConfig(): ServerConfig {
     const config: Record<string, any> = {}
 
     for (const [name, value] of Object.entries(process.env)) {
