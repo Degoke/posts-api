@@ -21,6 +21,11 @@ function isUUID(input) {
     return !!/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/i.exec(input);
 }
 exports.isUUID = isUUID;
+/**
+ * Generates random users, posts, and comments and returns them in the form of maps.
+ *
+ * @returns A promise that resolves to an object containing maps of posts and comments.
+ */
 function seedUsersPostsAndComments() {
     return __awaiter(this, void 0, void 0, function* () {
         const posts = new Map();

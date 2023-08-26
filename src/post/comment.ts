@@ -10,9 +10,14 @@ export const newCommentValidator = [
 ]
 
 /**
- * Handles a HTTP request to /auth/newuser.
- * @param req The HTTP request.
- * @param res The HTTP response.
+ * Handles the request to add a comment to a post.
+ *
+ * @param req - The request object containing the comment data.
+ * @param res - The response object to send the result.
+ * @throws {ValidationError} - If there are validation errors in the request.
+ * @throws {ServiceError} - If the postId is not a valid UUID or if the userId is falsy.
+ * @throws {ServiceError} - If the post with the given postId does not exist.
+ * @returns {Promise<void>} - Does not return any value directly, but sends a response with the created comment.
  */
 export async function addCommentToPostHandler(
     req: Request,

@@ -17,9 +17,12 @@ export const newUserValidators = [
 ]
 
 /**
- * Handles a HTTP request to /auth/newuser.
- * @param req The HTTP request.
- * @param res The HTTP response.
+ * Handles the creation of a new user.
+ *
+ * @param req - The request object containing the user's name, email, and password.
+ * @param res - The response object used to send the response back to the client.
+ * @throws {ValidationError} - If there are validation errors in the request body.
+ * @throws {ServiceError} - If the email is already registered or the password has been compromised.
  */
 export async function newUserHandler(
     req: Request,

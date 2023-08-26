@@ -12,9 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.seedPostsHandler = void 0;
 const utils_1 = require("../utils");
 /**
- * Handles a HTTP request to /auth/newuser.
- * @param req The HTTP request.
- * @param res The HTTP response.
+ * Handles a request to seed users, posts, and comments.
+ *
+ * @param req - The request object containing information about the HTTP request.
+ * @param res - The response object used to send the HTTP response to the client.
+ * @throws Throws an error if an error occurs during the seeding operation.
  */
 function seedPostsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {

@@ -12,6 +12,11 @@ export function isUUID(input: string): boolean {
     return !!/^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/i.exec(input);
   }
 
+/**
+ * Generates random users, posts, and comments and returns them in the form of maps.
+ * 
+ * @returns A promise that resolves to an object containing maps of posts and comments.
+ */
 export async function seedUsersPostsAndComments(): Promise<{ posts: Map<string, Post[]>, comments: Map<string, Comment[]>  }> {
     const posts: Map<string, Post[]> = new Map()
     const comments: Map<string, Comment[]> = new Map()

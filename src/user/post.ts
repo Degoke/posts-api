@@ -22,9 +22,14 @@ export const newPostValidators = [
 ]
 
 /**
- * Handles a HTTP request to /auth/newuser.
- * @param req The HTTP request.
- * @param res The HTTP response.
+ * Handles the creation of a new post by a user.
+ *
+ * @param req - The request object containing the user ID, post title, and content.
+ * @param res - The response object used to send the response back to the client.
+ * @throws {ValidationError} - If there are validation errors in the request data.
+ * @throws {ServiceError} - If the user ID is not a valid UUID or if the user with the given ID does not exist.
+ * @throws {AuthorizationError} - If the user ID does not match the authorized user ID.
+ * @throws {ServiceError} - If a post with the same title already exists for the user.
  */
 export async function createPostHandler(
     req: Request,
@@ -75,9 +80,12 @@ export async function createPostHandler(
 }
 
 /**
- * Handles a HTTP request to /auth/newuser.
- * @param req The HTTP request.
- * @param res The HTTP response.
+ * Handles the request to get posts for a specific user.
+ *
+ * @param req - The request object containing information about the HTTP request.
+ * @param res - The response object used to send the HTTP response.
+ * @throws {ServiceError} - If the provided user ID is not a valid UUID.
+ * @throws {AuthorizationError} - If the provided user ID does not match the ID of the authenticated user.
  */
 export async function getPostsHandler(
     req: Request,

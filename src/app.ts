@@ -43,6 +43,15 @@ function standardHeaders(_req: Request, res: Response, next: NextFunction): void
   next();
 }
 
+/**
+ * Initializes the application by setting up the necessary services, creating an HTTP server,
+ * configuring middleware, and defining the API routes.
+ * 
+ * @param app - An instance of the Express application.
+ * @param config - The server configuration object containing the port number, environment,
+ *                 server secret, database configuration, and Redis configuration.
+ * @returns The created HTTP server.
+ */
 export async function initApp(app: Express, config: ServerConfig): Promise<http.Server> {
   await initAppServices(config);
   server = http.createServer(app);
@@ -78,11 +87,20 @@ app.use(errorHandler);
   return server;
 }
 
+/**
+ * Initializes the necessary services for the application.
+ * 
+ * @param config - The server configuration object containing the necessary information for initializing the services.
+ * @returns A Promise that resolves to void.
+ */
 export async function initAppServices(config: ServerConfig): Promise<void> {
   initRedis(config.redis);
   await initDatabase(config.database);
 }
 
+/**
+ * Shuts down the application gracefully by closing the database connection, disconnecting from Redis, and closing the server if it is running.
+ */
 export async function shutdownApp(): Promise<void> {
   await closeDatabase();
   closeRedis();

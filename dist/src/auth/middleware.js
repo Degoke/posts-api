@@ -16,10 +16,26 @@ exports.authenticateTokenImpl = exports.authenticateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../config");
 const errors_1 = require("../errors/errors");
+/**
+ * Authenticates a token sent in the request headers.
+ *
+ * @param req - The request object containing information about the incoming request.
+ * @param res - The response object used to send the response back to the client.
+ * @param next - The next function in the middleware chain.
+ * @returns A promise that resolves when the token authentication is successful and rejects when an error occurs.
+ */
 function authenticateToken(req, res, next) {
     return authenticateTokenImpl(req, res).then(next).catch(next);
 }
 exports.authenticateToken = authenticateToken;
+/**
+ * Authenticates a token sent in the request headers.
+ * It verifies the token using a secret key and sets the decoded user information in the response locals.
+ *
+ * @param req - The request object containing the headers with the authorization token.
+ * @param res - The response object where the decoded user information will be stored.
+ * @throws {AuthenticationError} If the token type or token is missing, or if an error occurs during the verification process.
+ */
 function authenticateTokenImpl(req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {

@@ -47,6 +47,15 @@ function standardHeaders(_req, res, next) {
     res.set('X-XSS-Protection', '1; mode=block');
     next();
 }
+/**
+ * Initializes the application by setting up the necessary services, creating an HTTP server,
+ * configuring middleware, and defining the API routes.
+ *
+ * @param app - An instance of the Express application.
+ * @param config - The server configuration object containing the port number, environment,
+ *                 server secret, database configuration, and Redis configuration.
+ * @returns The created HTTP server.
+ */
 function initApp(app, config) {
     return __awaiter(this, void 0, void 0, function* () {
         yield initAppServices(config);
@@ -77,6 +86,12 @@ function initApp(app, config) {
     });
 }
 exports.initApp = initApp;
+/**
+ * Initializes the necessary services for the application.
+ *
+ * @param config - The server configuration object containing the necessary information for initializing the services.
+ * @returns A Promise that resolves to void.
+ */
 function initAppServices(config) {
     return __awaiter(this, void 0, void 0, function* () {
         (0, redis_1.initRedis)(config.redis);
@@ -84,6 +99,9 @@ function initAppServices(config) {
     });
 }
 exports.initAppServices = initAppServices;
+/**
+ * Shuts down the application gracefully by closing the database connection, disconnecting from Redis, and closing the server if it is running.
+ */
 function shutdownApp() {
     return __awaiter(this, void 0, void 0, function* () {
         yield (0, database_1.closeDatabase)();
